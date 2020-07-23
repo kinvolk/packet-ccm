@@ -20,9 +20,35 @@ package metallb
 // configFile is the configuration as parsed out of the ConfigMap,
 // without validation or useful high level types.
 type ConfigFile struct {
-	Peers          []Peer
-	BGPCommunities map[string]string `yaml:"bgp-communities"`
-	Pools          []AddressPool     `yaml:"address-pools"`
+	Peers             []Peer
+	BGPCommunities    map[string]string  `yaml:"bgp-communities"`
+	Pools             []AddressPool      `yaml:"address-pools"`
+	PeerAutodiscovery *peerAutodiscovery `yaml:"peer-autodiscovery"`
+}
+
+type peerAutodiscovery struct {
+	Defaults        *peerAutodiscoveryDefaults `yaml:"defaults"`
+	NodeSelectors   []NodeSelector             `yaml:"node-selectors"`
+	FromAnnotations *peerAutodiscoveryMapping  `yaml:"from-annotations"`
+	FromLabels      *peerAutodiscoveryMapping  `yaml:"from-labels"`
+}
+
+type peerAutodiscoveryDefaults struct {
+	MyASN    uint32 `yaml:"my-asn"`
+	ASN      uint32 `yaml:"peer-asn"`
+	Address  string `yaml:"peer-address"`
+	Port     uint16 `yaml:"peer-port"`
+	HoldTime string `yaml:"hold-time"`
+}
+
+type peerAutodiscoveryMapping struct {
+	MyASN    string `yaml:"my-asn"`
+	ASN      string `yaml:"peer-asn"`
+	Addr     string `yaml:"peer-address"`
+	Port     string `yaml:"peer-port"`
+	SrcAddr  string `yaml:"src-address"`
+	HoldTime string `yaml:"hold-time"`
+	RouterID string `yaml:"router-id"`
 }
 
 type Peer struct {

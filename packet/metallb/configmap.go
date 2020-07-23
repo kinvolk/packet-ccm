@@ -25,66 +25,6 @@ func (cfg *ConfigFile) Bytes() ([]byte, error) {
 	return yaml.Marshal(cfg)
 }
 
-// AddPeer adds a peer. If a matching peer already exists, do not change anything
-// Returns if anything changed
-func (cfg *ConfigFile) AddPeer(add *Peer) bool {
-	// ignore empty peer; nothing to add
-	if add == nil {
-		return false
-	}
-	var found bool
-
-	// go through the peers and see if we have one that matches
-	// definition of a match is:
-	// - MyASN matches
-	// - ASN matches
-	// - Addr matches
-	// - NodeSelectors all match (but order is ignored)
-	for _, peer := range cfg.Peers {
-		if !peer.Equal(add) {
-			continue
-		}
-		// they were equal, so we found a matcher
-		found = true
-	}
-	if found {
-		return false
-	}
-	cfg.Peers = append(cfg.Peers, *add)
-	return true
-}
-
-// RemovePeer remove a peer. If the matching peer does not exist, do not change anything
-func (cfg *ConfigFile) RemovePeer(remove *Peer) {
-	if remove == nil {
-		return
-	}
-	// go through the peers and see if we have a match
-	peers := make([]Peer, 0)
-	// remove that one, keep all others
-	for _, peer := range cfg.Peers {
-		if !peer.Equal(remove) {
-			peers = append(peers, peer)
-		}
-	}
-	cfg.Peers = peers
-}
-
-// RemovePeerBySelector remove a peer by selector. If the matching peer does not exist, do not change anything
-func (cfg *ConfigFile) RemovePeerBySelector(remove *NodeSelector) {
-	if remove == nil {
-		return
-	}
-	// go through the peers and see if we have a match
-	peers := make([]Peer, 0)
-	for _, peer := range cfg.Peers {
-		if !peer.MatchSelector(remove) {
-			peers = append(peers, peer)
-		}
-	}
-	cfg.Peers = peers
-}
-
 // AddAddressPool adds an address pool. If a matching pool already exists, do not change anything.
 // Returns if anything changed
 func (cfg *ConfigFile) AddAddressPool(add *AddressPool) bool {

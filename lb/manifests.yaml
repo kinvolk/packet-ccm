@@ -201,7 +201,8 @@ spec:
     spec:
       containers:
       - args:
-        - --port=7472
+        - --metrics-port=7472
+        - --status-port=7473
         - --config=config
         env:
         - name: METALLB_NODE_NAME
@@ -299,4 +300,9 @@ metadata:
   name: config
 data:
   config: |
-    peers: []
+    peer-autodiscovery:
+      from-annotations:
+        my-asn: packet.com/node-asn
+        peer-asn: packet.com/peer-asn
+        peer-address: packet.com/peer-ip
+        src-address: packet.com/src-ip

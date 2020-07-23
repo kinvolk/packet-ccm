@@ -144,14 +144,15 @@ _not_ recommended to override them. However, the settings are set as follows:
 In addition to enabling BGP and setting ASNs, the Packet CCM sets Kubernetes annotations on the nodes. It sets the
 following information:
 
-* `packet.com/node.asn` - Node, or local, ASN
-* `packet.com/peer.asns` - Peer ASNs, comma-separated if multiple
-* `packet.com/peer.ips` - Peer IPs, comma-separated if multiple
+* `packet.com/node-asn` - Node, or local, ASN
+* `packet.com/peer-asns` - Peer ASNs, comma-separated if multiple
+* `packet.com/peer-ips` - Peer IPs, comma-separated if multiple
+* `packet.com/src-ip` - Source IP to use
 
 These annotation names can be overridden, if you so choose. The settings are as follows:
 
-1. If the environment variables `PACKET_ANNOTATION_LOCAL_ASN`, `PACKET_ANNOTATION_PEER_ASNS`, `PACKET_ANNOTATION_PEER_IPS` are set. Else...
-1. If the config file has files named `annotationLocalASN`, `annotationPeerASNs`, `annotationPeerIPs`. Else...
+1. If the environment variables `PACKET_ANNOTATION_LOCAL_ASN`, `PACKET_ANNOTATION_PEER_ASNS`, `PACKET_ANNOTATION_PEER_IPS`, `PACKET_ANNOTATION_SRC_IP` are set. Else...
+1. If the config file has files named `annotationLocalASN`, `annotationPeerASNs`, `annotationPeerIPs`, `annotationSrcIP`. Else...
 1. Use the above defaults.
 
 ### Load Balancers
@@ -247,7 +248,7 @@ You can run the CCM locally on your laptop or VM, i.e. not in the cluster. This 
 1. Build it for your local platform `make build`
 1. Set the environment variable `CCM_SECRET` to a file with the secret contents as a json, i.e. the content of the secret's `stringData`, e.g. `CCM_SECRET=ccm-secret.yaml`
 1. Set the environment variable `KUBECONFIG` to a kubeconfig file with sufficient access to the cluster, e.g. `KUBECONFIG=mykubeconfig`
-1. Set the environment variable `PACKET_FACILITY_NAME` to the correct facility where the cluster is running, e.g. `PACKET_FACILITY_NAME=EWR1`
+1. Set the environment variable `PACKET_FACILITY_NAME` to the correct facility where the cluster is running, e.g. `PACKET_FACILITY_NAME=ewr1`
 1. If you want to use a different path to the loadbalancer manifest, available in this repository as [lb/manifests.yaml](./lib/manifests.yaml), e.g. `LB_MANIFEST=./lb/manifests.yaml` and set it to the argument `--load-balancer-manifest=$LB_MANIFEST`; the CCM default is `./lb/manifests.yaml`
 1. Run the command, e.g.:
 

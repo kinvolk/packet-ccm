@@ -74,7 +74,7 @@ func (m *controlPlaneEndpointManager) reconcileNodes(nodes []*v1.Node, remove bo
 		m.inProcess = false
 	}()
 	if m.eipTag == "" {
-		return errors.New("elastic ip tag is empty. Nothing to do")
+		return errors.New("control plane loadbalancer elastic ip tag is empty. Nothing to do")
 	}
 	ipList, _, err := m.ipResSvr.List(m.projectID, &packngo.ListOptions{
 		Includes: []string{"assignments"},
